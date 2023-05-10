@@ -5,8 +5,6 @@ const port = 3000;
 const connectDB = require('./db/connect');
 const baseUrl = '/api/v1/tasks';
 
-const mongoUrl = process.env.MONGO_CONNECTION_STRING;
-
 require('./db/connect');
 
 const tasks = require('./routes/tasks');
@@ -23,7 +21,7 @@ app.use(`${baseUrl}`, tasks);
 
 const start = async () => {
   try {
-    await connectDB(mongoUrl);
+    await connectDB(process.env.MONGO_CONNECTION_STRING);
     app.listen(port, () => console.log(`Server started on port ${port}`));
   } catch (error) {
     console.log(error);
