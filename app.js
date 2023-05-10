@@ -1,7 +1,13 @@
 const express = require('express');
 const app = express();
+require('dotenv').config();
 const port = 3000;
+const connectDB = require('./db/connect');
 const baseUrl = '/api/v1/tasks';
+
+const mongoUrl = process.env.MONGO_CONNECTION_STRING;
+
+require('./db/connect');
 
 const tasks = require('./routes/tasks');
 
@@ -15,4 +21,13 @@ app.get('/hello', (req, res) => {
 
 app.use(`${baseUrl}`, tasks);
 
-app.listen(port, () => console.log(`Server started on port ${port}`));
+const start = async () => {
+  try {
+    await connectDB(mongoUrl);
+    app.listen(port, () => console.log(`Server started on port ${port}`));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+start();
